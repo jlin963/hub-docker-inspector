@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 tasks.withType(GroovyCompile) { options.encoding = 'UTF-8' }
 
 group = 'com.blackducksoftware.integration'
-version = '2.0.0-SNAPSHOT'
+version = '2.0.1-SNAPSHOT'
 description = ''
 String hubDockerImageName = 'hub-docker-inspector'
 
@@ -300,7 +300,13 @@ task createDpkgDockerfileTasks() {
             addFile("${project.name}-${version}.jar", "/opt/blackduck/${hubDockerImageName}")
             addFile("hub-docker-inspector-launcher.sh", "/opt/blackduck/${hubDockerImageName}")
 			addFile("template/application.properties", "/opt/blackduck/${hubDockerImageName}/template")
-            runCommand "chmod u+x ${hubDockerPgmDir}/*.sh"
+            runCommand "chmod -R ug+rw ${hubDockerPgmDir}"
+            runCommand "chmod ug+x ${hubDockerPgmDir}/*.sh"
+            
+            //runCommand "systemctl status docker"
+            
+            runCommand "chmod g+w /var/lib/dpkg"
+            //user '10001'
         }
     }
 }
